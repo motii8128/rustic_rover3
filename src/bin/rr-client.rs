@@ -37,6 +37,7 @@ fn main()
                 let cmd = Robot::deserialization(read_str);
 
                 info.message = format!("Data -> {},{},{},{},{},{}", cmd.wheel1,cmd.wheel2,cmd.wheel3,cmd.frontback,cmd.updown,cmd.hand);
+                logger.log(info.clone());
             }
             Err(_e)=>{
 
