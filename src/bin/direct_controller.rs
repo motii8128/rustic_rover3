@@ -9,7 +9,7 @@ fn main()
     let mut gamepads = Gamepads::new();
 
     let logger = Logger::new();
-    let mut info = ProcessInfo::new("GamePadDriver", LogType::Info, "Start GamePadDriver");
+    let mut info = ProcessInfo::new("GamePadDriver", LogType::Info, "Start DirectDriver");
 
     let mut controller_num = 0;
 
