@@ -97,7 +97,7 @@ fn main()
         match sock.send_to(controller_data.gc1.serialization().as_bytes(), "192.168.11.2:64205")
         {
             Ok(_size)=>{
-                info.message = "Send Message".to_string();
+                info.message = controller_data.gc1.serialization();
                 logger.log(info.clone());
             }
             Err(_e)=>{
