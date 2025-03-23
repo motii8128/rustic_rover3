@@ -29,7 +29,8 @@ fn main()
 
                 info.message = format!("Get Connection from {}:{}", addr.ip().to_string(), addr.port());
                 logger.log(info.clone());
-                info.message = format!("Message -> {}", read_str);     
+                info.message = format!("Message -> {}", read_str);   
+                logger.log(info.clone());  
                 
                 check = true;           
                 dest_ip = format!("{}:{}", addr.ip().to_string(), addr.port());
