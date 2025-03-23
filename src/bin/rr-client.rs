@@ -9,7 +9,7 @@ fn main()
 
     let external_socket = UdpSocket::bind("192.168.11.62:64201").unwrap();
 
-    // let serial = serialport::new("/dev/ttyACM0", 230400).open().unwrap();
+    let mut serial = serialport::new("/dev/ttyACM0", 230400).open().unwrap();
 
     let mut info = ProcessInfo::new("rr-client", LogType::Info, "Start RusticRover-Client");
     logger.log(info.clone());
@@ -45,8 +45,15 @@ fn main()
                 buf[5] = ((cmd.hand as f32 * 1.27) + 127.0) as u8;
                 buf[6] = b'\n';
 
-                info.message = format!("Data -> {},{},{},{},{},{}", buf[0],buf[1],buf[2],buf[3],buf[4],buf[5]);
-                logger.log(info.clone());
+                match serial.write(&buf) {
+                    Ok(_size)=>{
+                        info.message = format!("Data -> {},{},{},{},{},{}", buf[0],buf[1],buf[2],buf[3],buf[4],buf[5]);
+                        logger.log(info.clone());
+                    }
+                    Err(_e)=>{
+
+                    }
+                }
             }
             Err(_e)=>{
 
