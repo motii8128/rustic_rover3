@@ -57,12 +57,12 @@ fn main()
 
                 //     }
                 // }
+
+                std::thread::sleep(std::time::Duration::from_millis(50));
             }
             Err(_e)=>{
 
             }
         }
-
-        std::thread::sleep(std::time::Duration::from_millis(50));
     }
 }
