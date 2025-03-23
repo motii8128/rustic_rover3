@@ -9,7 +9,7 @@ fn main()
 
     let external_socket = UdpSocket::bind("192.168.0.50:64201").unwrap();
 
-    let mut serial = serialport::new("/dev/ttyACM0", 230400).open().unwrap();
+    let mut serial = serialport::new("/dev/ttyACM0", 230400).timeout(std::time::Duration::from_millis(50)).open().unwrap();
 
     let mut info = ProcessInfo::new("rr-client", LogType::Info, "Start RusticRover-Client");
     logger.log(info.clone());
