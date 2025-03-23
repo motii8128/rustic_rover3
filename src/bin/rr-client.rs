@@ -37,12 +37,12 @@ fn main()
                 let cmd = Robot::deserialization(read_str);
 
                 let mut buf = [0_u8; 7];
-                buf[0] = (cmd.wheel1 as f32 * 1.27) as u8 + 127;
-                buf[1] = (cmd.wheel2 as f32 * 1.27) as u8 + 127;
-                buf[2] = (cmd.wheel3 as f32 * 1.27) as u8 + 127;
-                buf[3] = (cmd.frontback as f32 * 1.27) as u8 + 127;
-                buf[4] = (cmd.updown as f32 * 1.27) as u8 + 127;
-                buf[5] = (cmd.hand as f32 * 1.27) as u8 + 127;
+                buf[0] = ((cmd.wheel1 as f32 * 1.27) + 127.0) as u8;
+                buf[1] = ((cmd.wheel2 as f32 * 1.27) + 127.0) as u8;
+                buf[2] = ((cmd.wheel3 as f32 * 1.27) + 127.0) as u8;
+                buf[3] = ((cmd.frontback as f32 * 1.27) + 127.0) as u8;
+                buf[4] = ((cmd.updown as f32 * 1.27) + 127.0) as u8;
+                buf[5] = ((cmd.hand as f32 * 1.27) + 127.0) as u8;
                 buf[6] = b'\n';
 
                 info.message = format!("Data -> {},{},{},{},{},{}", buf[0],buf[1],buf[2],buf[3],buf[4],buf[5]);
