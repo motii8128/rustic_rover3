@@ -7,7 +7,7 @@ fn main()
 {
     let logger = Logger::new();
 
-    let external_socket = UdpSocket::bind("192.168.0.50:64201").unwrap();
+    let external_socket = UdpSocket::bind("192.168.11.62:64201").unwrap();
 
     let mut serial = serialport::new("/dev/ttyACM0", 230400).open().unwrap();
 
@@ -16,7 +16,7 @@ fn main()
 
     loop {
         let send_msg = format!("rr-client in Orin Nano");
-        match external_socket.send_to(send_msg.as_bytes(), "192.168.0.62:64201") {
+        match external_socket.send_to(send_msg.as_bytes(), "192.168.11.55:64201") {
             Ok(_size)=>{
                 
             }
