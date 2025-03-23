@@ -7,7 +7,7 @@ fn main()
 {
     let logger = Logger::new();
 
-    let external_socket = UdpSocket::bind("192.168.11.40:64201").unwrap();
+    let external_socket = UdpSocket::bind("192.168.11.62:64201").unwrap();
 
     // let serial = serialport::new("/dev/ttyACM0", 230400).open().unwrap();
 
