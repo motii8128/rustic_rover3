@@ -1,0 +1,12 @@
+[package]
+name = "rustic_rover3"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+gamepads = "0.1.7"
+serde = {version = "1.0.148", features = ["derive"]}
+serde_json = "1.0.41"
+colored = "2.1.0"
+termion = "1.5"
+serialport = "4.2.0"
