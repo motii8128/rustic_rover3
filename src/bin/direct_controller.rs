@@ -1,12 +1,14 @@
 use rustic_rover3::common::Logger;
-use rustic_rover3::common::type_define::{DoubleController, GameController, LogType, Packet, ProcessInfo};
+use rustic_rover3::common::type_define::{DoubleController, GameController, LogType, ProcessInfo};
 use gamepads::{Gamepads, Button};
-use std::net::UdpSocket;
+use serialport;
 
 fn main()
 {
-    let sock = UdpSocket::bind("192.168.11.50:64201").unwrap();
     let mut gamepads = Gamepads::new();
+
+    let mut serial = serialport::new("/dev/ttyACM0", 115200).open().unwrap();
+
 
     let logger = Logger::new();
     let mut info = ProcessInfo::new("GamePadDriver", LogType::Info, "Start DirectDriver");
@@ -14,6 +16,10 @@ fn main()
     let mut controller_num = 0;
 
     logger.log(info.clone());
+
+    let mut last = std::time::Instant::now();
+
+    let mut pos = 0.0_f64;
 
     loop {
         gamepads.poll();
@@ -26,6 +32,10 @@ fn main()
 
             controller.left_stick.x = gamepad.left_stick_x();
             controller.left_stick.y = gamepad.left_stick_y();
+            if controller.left_stick.y.abs() < 0.05
+            {
+                controller.left_stick.y = 0.0;
+            }
             controller.right_stick.x = gamepad.right_stick_x();
             controller.right_stick.y = gamepad.right_stick_y();
 
@@ -41,6 +51,8 @@ fn main()
             controller.btns.r2 = bool_to_i8(gamepad.is_currently_pressed(Button::FrontRightLower));
             controller.btns.l1 = bool_to_i8(gamepad.is_currently_pressed(Button::FrontLeftUpper));
             controller.btns.l2 = bool_to_i8(gamepad.is_currently_pressed(Button::FrontLeftLower));
+
+            
 
             controller_data.num += 1;
             controllers.push(controller);            
@@ -94,15 +106,40 @@ fn main()
             
         }
 
-        match sock.send_to(controller_data.gc1.serialization().as_bytes(), "192.168.11.2:64205")
+        pos += (controller_data.gc1.btns.triangle - controller_data.gc1.btns.cross)  as f64 * 0.000001 as f64;
+        if pos > 1.0
         {
-            Ok(_size)=>{
-                info.message = controller_data.gc1.serialization();
-                logger.log(info.clone());
-            }
-            Err(_e)=>{
+            pos = 1.0
+        }
+        else if pos < 0.0
+        {
+            pos = 0.0
+        }
 
+        let mut buf = [0_u8; 7];
+        buf[0] = ((controller_data.gc1.left_stick.y * 127.0) as i16 + 127) as u8;
+        buf[1] = ((controller_data.gc1.dpad.y * 127.0) as i16 + 127) as u8;
+        buf[2] = (((controller_data.gc1.btns.l1 - controller_data.gc1.btns.l2) as f32 * 127.0) as i16 + 127) as u8;
+        buf[3] = ((pos * 127.0) as i16 + 127) as u8;
+        buf[4] = ((controller_data.gc1.right_stick.y as f32 * 127.0) as i16 + 127) as u8;
+        buf[5] = (((controller_data.gc1.btns.r1 - controller_data.gc1.btns.r2)as f32 * 127.0) as i16 + 127) as u8;
+        buf[6] = b'\n';
+
+
+        if last.elapsed() >= std::time::Duration::from_millis(30)
+        {
+            match serial.write(&buf)
+            {
+                Ok(_size)=>{
+                    info.message = format!("Position : {:.5}", pos);
+                    logger.log(info.clone());
+                }
+                Err(_e)=>{
+
+                }
             }
+
+            last = std::time::Instant::now();
         }
     }
 }

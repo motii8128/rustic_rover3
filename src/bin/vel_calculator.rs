@@ -21,13 +21,13 @@ fn main()
             Some(con)=>{
                 info.status = LogType::Info;
                 let mut cmd = Robot::new();
-                let wheel1_rate = -1.0*wheel_rad1.sin()*con.x + wheel_rad1.cos()*con.y + radius * con.rotation;
+                let wheel1_rate = 1.0*wheel_rad1.sin()*con.x + wheel_rad1.cos()*con.y + radius * con.rotation;
                 cmd.wheel1 = (100.0 * wheel1_rate) as i32;
 
-                let wheel2_rate = -1.0*wheel_rad2.sin()*con.x + wheel_rad2.cos()*con.y + radius * con.rotation;
+                let wheel2_rate = 1.0*wheel_rad2.sin()*con.x + wheel_rad2.cos()*con.y + radius * con.rotation;
                 cmd.wheel2 = (100.0 * wheel2_rate) as i32;
 
-                let wheel3_rate = -1.0*wheel_rad3.sin()*con.x + wheel_rad3.cos()*con.y + radius * con.rotation;
+                let wheel3_rate = 1.0*wheel_rad3.sin()*con.x + wheel_rad3.cos()*con.y + radius * con.rotation;
                 cmd.wheel3 = (100.0 * wheel3_rate) as i32;
 
                 cmd.frontback = con.frontback as i32 * 100;

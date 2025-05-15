@@ -9,7 +9,7 @@ fn main()
     let logger = Logger::new();
     let mut info = ProcessInfo::new("UdpTransporter", LogType::Info, "Start UdpTransporter");
 
-    let external_socket = UdpSocket::bind("192.168.11.55:64201").unwrap();
+    let external_socket = UdpSocket::bind("127.0.0.1:64256").unwrap();
     let _ = external_socket.set_read_timeout(Some(std::time::Duration::from_millis(1000)));
 
     logger.log(info.clone());
